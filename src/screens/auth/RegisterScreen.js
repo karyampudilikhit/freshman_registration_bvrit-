@@ -55,11 +55,9 @@ const RegisterScreen = ({ navigation }) => {
 
     clearError();
     setErrors({});
-
-    const dobFormatted = form.dob
-      ? `${form.dob.getFullYear()}${String(form.dob.getMonth() + 1).padStart(2, "0")}${String(form.dob.getDate()).padStart(2, "0")}`
-      : "";
-
+const dobFormatted = form.dob
+  ? `${String(form.dob.getDate()).padStart(2, "0")}${String(form.dob.getMonth() + 1).padStart(2, "0")}${form.dob.getFullYear()}`
+  : "";
     const registerData = {
       name: form.name.trim(),
       parentPhone: form.parentPhone.trim(),
@@ -70,7 +68,7 @@ const RegisterScreen = ({ navigation }) => {
 
     const result = await register(registerData);
     if (result.success) {
-      const generatedId = result.data?.uniqueId || "2026-bvritn-1a-0001";
+      const generatedId = result.data?.uniqueId || "2026-BVRITN-1a-0001";
       navigation.replace(SCREENS.REGISTRATION_SUCCESS, {
         uniqueId: generatedId,
         password: dobFormatted,

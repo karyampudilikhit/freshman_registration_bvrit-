@@ -4,8 +4,6 @@ import { API } from "../constants/config";
 const DEMO_MODE = true;
 const DEMO_STORAGE_KEY = "@demo_user_data";
 
-let studentCounter = 1;
-
 let storedUserData = null;
 
 const authService = {
@@ -58,6 +56,10 @@ const authService = {
     if (DEMO_MODE) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      const stored = await AsyncStorage.getItem("@student_counter");
+      const studentCounter = stored ? parseInt(stored) + 1 : 1;
+      await AsyncStorage.setItem("@student_counter", String(studentCounter));
+
       const nameParts = (data.name || "").trim().split(" ");
       const firstName = nameParts[0] || "";
       const lastName = nameParts.slice(1).join(" ") || "";
@@ -71,9 +73,13 @@ const authService = {
         dob: data.dob ? data.dob.toISOString().split("T")[0] : null,
       };
 
+<<<<<<< HEAD
       // const year = data.dob ? data.dob.getFullYear() : new Date().getFullYear();
       const year = new Date().getFullYear();
       const uniqueId = `${year}-bvritn-1a-${String(studentCounter++).padStart(4, "0")}`;
+=======
+      const uniqueId = `2026-BVRITN-1a-${String(studentCounter).padStart(4, "0")}`;
+>>>>>>> ddea661 (change the data of birth and unique id)
 
       return {
         message: "Registration successful (Demo Mode)",
