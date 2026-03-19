@@ -1,3 +1,7 @@
+// ─── Demo Mode ────────────────────────────────────────────────────────────────
+// Single source of truth. Set to false before production build.
+export const DEMO_MODE = true;
+
 // ─── App Info ─────────────────────────────────────────────────────────────────
 export const APP = {
   NAME: "Freshman Registration",

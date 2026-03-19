@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { STORAGE_KEYS } from "../constants/config";
+import { STORAGE_KEYS, DEMO_MODE } from "../constants/config";
 
 // ─── Initial State ─────────────────────────────────────────────────────────────
 const initialState = {
@@ -63,6 +63,7 @@ const authReducer = (state, action) => {
     case AUTH_ACTIONS.UPDATE_USER:
       return { ...state, user: { ...state.user, ...action.payload } };
 
+    // FIX: RESTORE_SESSION is now actually dispatched (was defined but never used)
     case AUTH_ACTIONS.RESTORE_SESSION:
       return {
         ...state,
@@ -84,9 +85,34 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Don't restore session on app start - always start from beginning
+  // In DEMO_MODE always start fresh (no persistent login).
+  // In production, restore the saved session so users stay logged in.
   useEffect(() => {
-    dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+    if (DEMO_MODE) {
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+      return;
+    }
+
+    const restoreSession = async () => {
+      try {
+        const token = await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+        const userData = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
+
+        if (token && userData) {
+          const user = JSON.parse(userData);
+          dispatch({
+            type: AUTH_ACTIONS.RESTORE_SESSION,
+            payload: { user, token },
+          });
+        } else {
+          dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+        }
+      } catch (_) {
+        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+      }
+    };
+
+    restoreSession();
   }, []);
 
   // ─── Actions ────────────────────────────────────────────────────────────────
@@ -110,7 +136,6 @@ export const AuthProvider = ({ children }) => {
         STORAGE_KEYS.USER_DATA,
         STORAGE_KEYS.APP_STARTED,
       ]);
-      // Also clear student profile data
       const { studentService } = await import("../services/studentService");
       await studentService.resetProfile();
     } catch (_) {}

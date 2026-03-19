@@ -13,7 +13,7 @@ import AppNavigator                    from './src/navigation/AppNavigator';
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
   'VirtualizedLists should never be nested',
-  'Warning: Cannot update a component',
+  'Warning: Cannot update a component', 
 ]);
 
 // ─── Inner component to consume theme for StatusBar ───────────────────────────

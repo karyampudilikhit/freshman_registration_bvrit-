@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
   SafeAreaView, ActivityIndicator,
@@ -22,10 +22,10 @@ const OTPVerificationScreen = ({ navigation, route }) => {
     setTimeout(() => navigation.replace(onVerifiedScreen), 1200);
   });
 
-  // Auto-send OTP on mount
-  React.useEffect(() => {
+  // FIX: sendOTP added to dependency array (was missing, caused lint warning)
+  useEffect(() => {
     if (phone) sendOTP(phone);
-  }, []);
+  }, [sendOTP]);
 
   const maskedPhone = phone
     ? phone.replace(/(\d{2})\d{6}(\d{2})/, '$1xxxxxx$2')

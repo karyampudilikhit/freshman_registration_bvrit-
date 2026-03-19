@@ -1,7 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API, OTP } from "../constants/config";
+import { API, OTP, DEMO_MODE } from "../constants/config";
 
-const DEMO_MODE = true;
 const DEMO_OTP = "123456";
 
 const otpService = {
@@ -130,6 +128,8 @@ const otpService = {
     const response = await fetch(
       `${API.BASE_URL}/auth/otp/status?phone=${encodeURIComponent(phone)}`,
     );
+
+    if (!response.ok) throw new Error("Failed to check OTP status");
     return response.json();
   },
 };

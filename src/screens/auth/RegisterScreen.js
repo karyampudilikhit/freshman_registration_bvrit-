@@ -13,6 +13,7 @@ import {
 import Input from "../../components/common/Input";
 import DatePicker from "../../components/auth/DatePicker";
 import { SCREENS } from "../../constants/config";
+// FIX: validation now lives only in useAuthHook — removed duplicate local validateForm
 import useAuthHook from "../../hooks/useAuth";
 import { useAuth } from "../../context/AuthContext";
 
@@ -33,31 +34,12 @@ const RegisterScreen = ({ navigation }) => {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
   };
 
-  const validateForm = () => {
-    const stepErrors = {};
-    if (!form.name?.trim()) stepErrors.name = "Student name is required.";
-    if (!form.parentPhone?.trim())
-      stepErrors.parentPhone = "Parent's phone number is required.";
-    else if (!/^[6-9]\d{9}$/.test(form.parentPhone))
-      stepErrors.parentPhone = "Enter a valid 10-digit phone number.";
-    if (!form.interhallTicket?.trim())
-      stepErrors.interhallTicket = "Interhall ticket number is required.";
-    if (!form.dob) stepErrors.dob = "Date of birth is required.";
-    return stepErrors;
-  };
-
   const handleRegister = async () => {
-    const stepErrors = validateForm();
-    if (Object.keys(stepErrors).length > 0) {
-      setErrors(stepErrors);
-      return;
-    }
-
     clearError();
     setErrors({});
 
     const dobFormatted = form.dob
-      ? `${form.dob.getFullYear()}${String(form.dob.getMonth() + 1).padStart(2, "0")}${String(form.dob.getDate()).padStart(2, "0")}`
+      ? `${String(form.dob.getDate()).padStart(2, "0")}${String(form.dob.getMonth() + 1).padStart(2, "0")}${form.dob.getFullYear()}`
       : "";
 
     const registerData = {
@@ -68,9 +50,10 @@ const RegisterScreen = ({ navigation }) => {
       password: dobFormatted,
     };
 
+    // FIX: validation happens inside useAuthHook.register() — no duplicate logic here
     const result = await register(registerData);
     if (result.success) {
-      const generatedId = result.data?.uniqueId || "2026-bvritn-1a-0001";
+      const generatedId = result.data?.uniqueId || "2026-BVRITN-1a-0001";
       navigation.replace(SCREENS.REGISTRATION_SUCCESS, {
         uniqueId: generatedId,
         password: dobFormatted,

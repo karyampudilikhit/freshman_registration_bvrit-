@@ -1,8 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "./api";
-import { API } from "../constants/config";
+import { API, DEMO_MODE } from "../constants/config";
 
-const DEMO_MODE = true;
 const PROFILE_STORAGE_KEY = "@student_profile_data";
 
 let storedProfile = null;
@@ -35,7 +34,8 @@ const studentService = {
         address: "",
         tenthPercentage: "",
         interCollege: "",
-        interHallticket: "",
+        // FIX: consistent casing — capital T throughout
+        interHallTicket: "",
         interMarks: "",
         hostelType: null,
         transportType: "",
@@ -58,7 +58,9 @@ const studentService = {
         booksNewspaper: "",
         sportName: "",
         sportRole: "",
-        tournamentWon: "",
+        // FIX: unified field name — was tournamentWon in getProfile/initProfile
+        // but tournamentsAttended in updateProfile's fields array
+        tournamentsAttended: "",
         placementDomain: "",
         verificationStatus: "pending",
         photoUri: null,
@@ -118,6 +120,7 @@ const studentService = {
       "booksNewspaper",
       "sportName",
       "sportRole",
+      // FIX: was tournamentsAttended here but tournamentWon in getProfile/initProfile
       "tournamentsAttended",
     ];
 
@@ -142,7 +145,8 @@ const studentService = {
       address: "",
       tenthPercentage: "",
       interCollege: "",
-      interHallticket: "",
+      // FIX: consistent casing
+      interHallTicket: "",
       interMarks: "",
       hostelType: null,
       transportType: "",
@@ -165,7 +169,8 @@ const studentService = {
       booksNewspaper: "",
       sportName: "",
       sportRole: "",
-      tournamentWon: "",
+      // FIX: unified field name
+      tournamentsAttended: "",
       placementDomain: "",
       uniqueId: userData.uniqueId || "",
       verificationStatus: "pending",
