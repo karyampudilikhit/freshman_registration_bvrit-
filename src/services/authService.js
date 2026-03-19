@@ -71,7 +71,8 @@ const authService = {
         dob: data.dob ? data.dob.toISOString().split("T")[0] : null,
       };
 
-      const year = data.dob ? data.dob.getFullYear() : new Date().getFullYear();
+      // const year = data.dob ? data.dob.getFullYear() : new Date().getFullYear();
+      const year = new Date().getFullYear();
       const uniqueId = `${year}-bvritn-1a-${String(studentCounter++).padStart(4, "0")}`;
 
       return {
