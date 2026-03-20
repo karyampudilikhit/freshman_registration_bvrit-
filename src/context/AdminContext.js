@@ -7,7 +7,7 @@ const initialState = {
   admin: null,
   token: null,
   isLoggedIn: false,
-  isLoading: true, // Changed to true initially
+  isLoading: true,
   error: null,
 
   // Dashboard data
@@ -87,7 +87,7 @@ const adminReducer = (state, action) => {
       };
 
     case ADMIN_ACTIONS.LOGOUT:
-      return { ...initialState };
+      return { ...initialState, isLoading: false };
 
     case ADMIN_ACTIONS.SET_ERROR:
       return { ...state, error: action.payload, isLoading: false };
@@ -209,16 +209,10 @@ export const AdminProvider = ({ children }) => {
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const savedData = await AsyncStorage.getItem(STORAGE_KEYS.ADMIN_DATA);
-        if (savedData) {
-          const admin = JSON.parse(savedData);
-          dispatch({
-            type: ADMIN_ACTIONS.LOGIN_SUCCESS,
-            payload: { admin, token: admin.token || "restored" },
-          });
-        }
+        // ✅ Always clear admin session on app start — force login every time
+        await AsyncStorage.removeItem(STORAGE_KEYS.ADMIN_DATA);
       } catch (error) {
-        console.log("Failed to restore admin session:", error);
+        console.log("Failed to clear admin session:", error);
       } finally {
         dispatch({ type: ADMIN_ACTIONS.SET_LOADING, payload: false });
       }
@@ -303,5 +297,6 @@ export const useAdmin = () => {
   if (!context) throw new Error("useAdmin must be used within AdminProvider");
   return context;
 };
+
 
 export default AdminContext;

@@ -5,6 +5,7 @@ const DEMO_MODE = true;
 const DEMO_STORAGE_KEY = "@demo_user_data";
 
 let storedUserData = null;
+let studentCounter = 1; // ✅ moved here so logout can reset it
 
 const authService = {
   login: async (uniqueId, password) => {
@@ -57,7 +58,7 @@ const authService = {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const stored = await AsyncStorage.getItem("@student_counter");
-      const studentCounter = stored ? parseInt(stored) + 1 : 1;
+      studentCounter = stored ? parseInt(stored) + 1 : 1; // ✅ use module-level var
       await AsyncStorage.setItem("@student_counter", String(studentCounter));
 
       const nameParts = (data.name || "").trim().split(" ");
@@ -73,8 +74,6 @@ const authService = {
         dob: data.dob ? data.dob.toISOString().split("T")[0] : null,
       };
 
-      // const year = data.dob ? data.dob.getFullYear() : new Date().getFullYear();
-      const year = new Date().getFullYear();
       const uniqueId = `2026-BVRITN-1a-${String(studentCounter++).padStart(4, "0")}`;
 
       return {
@@ -112,7 +111,7 @@ const authService = {
     if (DEMO_MODE) {
       await new Promise((resolve) => setTimeout(resolve, 300));
       storedUserData = null;
-      studentCounter = 1;
+      studentCounter = 1; // ✅ now works — module-level var
       return { message: "Logged out (Demo Mode)" };
     }
 

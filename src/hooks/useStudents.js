@@ -163,4 +163,6 @@ const useStudents = () => {
   };
 };
 
+// ✅ Export both named and default to support any import style
+export { useStudents };
 export default useStudents;

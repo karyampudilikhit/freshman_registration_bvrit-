@@ -8,6 +8,14 @@ export const BRANCHES = [
     color: '#1D4ED8',
   },
   {
+    id:'csd',
+    name: 'Computer Science & Data Science',
+    shortName: 'CSD',
+    code: 'CSD',
+    icon: '🎨',
+    color: '#0c1c72',
+  },
+  {
     id: 'ece',
     name: 'Electronics & Communication Engineering',
     shortName: 'ECE',
@@ -40,10 +48,10 @@ export const BRANCHES = [
     color: '#059669',
   },
   {
-    id: 'it',
-    name: 'Information Technology',
-    shortName: 'IT',
-    code: 'IT',
+    id: 'csbs',
+    name: 'Computer Science & Business Systems',
+    shortName: 'CSBS',
+    code: 'CSBS',
     icon: '🖥️',
     color: '#0891B2',
   },
@@ -56,12 +64,28 @@ export const BRANCHES = [
     color: '#9333EA',
   },
   {
-    id: 'aero',
-    name: 'Aeronautical Engineering',
-    shortName: 'AERO',
-    code: 'AE',
-    icon: '✈️',
+    id: 'csm',
+    name: 'Computer Science & Machine Learning',
+    shortName: 'CSM',
+    code: 'CSM',
+    icon: '🔢',
     color: '#0284C7',
+  },
+  {
+    id: 'BME', // ✅ fixed: added missing comma after id
+    name: 'Biomedical Engineering',
+    shortName: 'BME',
+    code: 'BME',
+    icon: '🩺',
+    color: '#09f55f',
+  }, // ✅ fixed: added missing comma after this entry
+  {
+    id: 'PHE',
+    name: 'Production & Industrial Engineering',
+    shortName: 'PHE',
+    code: 'PHE',
+    icon: '🏭',
+    color: '#05e7d1',
   },
 ];
 
